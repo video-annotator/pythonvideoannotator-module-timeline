@@ -1,5 +1,7 @@
 import os
 from pysettings import conf
+from send2trash import send2trash
+from pythonvideoannotator_models.utils import tools
 from pythonvideoannotator.utils.tools import list_files_in_path
 
 class Module(object):
@@ -89,9 +91,15 @@ class Module(object):
 		graphs_path = os.path.join(project_path, 'graphs')
 		if not os.path.exists(graphs_path): os.makedirs(graphs_path)
 
+		graphs = []
 		for graph in self._time.graphs:
 			graph_path = os.path.join(graphs_path, graph.name+'.csv')
 			graph.export_2_file(graph_path)
+			graphs.append(graph_path)
+
+
+		for path in tools.list_files_in_path(graphs_path):
+			if path not in graphs: send2trash(path)
 
 		return data
 
