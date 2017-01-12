@@ -62,10 +62,8 @@ class Module(object):
 		"""
 		if self._time._time._video_playing:
 			timeout_interval = (1000 / self._player.fps)
-			print("VIDEO PLAYING @", self._player.fps, "FPS")
 			self._player._timer.start(timeout_interval)
 		else:
-			print("VIDEO STOPPED")
 			self._player._timer.stop()
 
 	def __timeline_fps_changed(self):
