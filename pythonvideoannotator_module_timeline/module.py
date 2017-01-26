@@ -73,7 +73,7 @@ class Module(object):
 
 	def process_frame_event(self, frame):
 		if self._update_time and self._player.value:
-			self._time.value = self._player.video_index
+			self._time.value = self._player.video_index-1
 
 		return super(Module, self).process_frame_event(frame)
 
