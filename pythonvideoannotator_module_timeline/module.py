@@ -51,9 +51,11 @@ class Module(object):
 
 		# Flag to avoid recursive position change, between the player and the timeline
 		self._update_time = False        
-		self._player.video_index = self._time.value
+		self._player.video_index = self._time.value-1
 		self._player.update_frame()
 		self._update_time = True
+
+	def __dummy(self): pass
 
 	def __timeline_play_video(self):
 		"""
@@ -73,8 +75,10 @@ class Module(object):
 
 	def process_frame_event(self, frame):
 		if self._update_time and self._player.value:
+			self._time.pointer_changed_event = self.__dummy
 			self._time.value = self._player.video_index-1
-
+			self._time.pointer_changed_event = self.__time_changed
+				
 		return super(Module, self).process_frame_event(frame)
 
 
