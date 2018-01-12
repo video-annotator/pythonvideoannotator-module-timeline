@@ -106,8 +106,9 @@ class Module(object):
 		return data
 
 	def load(self, data, project_path=None):
-		super(Module,self).load(data, project_path)
 		graphs_path = os.path.join(project_path, 'graphs')
-		
 		for graph_path in list_files_in_path(graphs_path):
 			self._time.import_graph_file(graph_path, ignore_rows=1)
+		
+		super(Module,self).load(data, project_path)
+		
