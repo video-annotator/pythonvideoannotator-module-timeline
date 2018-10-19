@@ -1,5 +1,5 @@
 import os
-from pyforms import conf
+from confapp import conf
 from send2trash import send2trash
 from pythonvideoannotator_models.utils import tools
 from pythonvideoannotator.utils.tools import list_files_in_path
