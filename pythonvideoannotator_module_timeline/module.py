@@ -1,6 +1,7 @@
 import os
 from confapp import conf
 from send2trash import send2trash
+from AnyQt import QtCore
 from pythonvideoannotator_models.utils import tools
 from pythonvideoannotator.utils.tools import list_files_in_path
 
@@ -23,6 +24,7 @@ class Module(object):
 
 	def init_form(self):
 		self._time.pointer_changed_event = self.__time_changed
+		self._time.key_release_event = self.__time_key_release_evt
 		#self._time.isPlaying      = self.__timeline_play_video
 		#self._time.fpsChanged     = self.__timeline_fps_changed
 		#self._time.getExportFilename= self.__createFilename2Export
@@ -43,6 +45,25 @@ class Module(object):
 	#### EVENTS ##########################################################################
 	######################################################################################
 
+	def __time_key_release_evt(self, event):
+
+		# walk backwards
+		if event.key() == QtCore.Qt.Key_Z:
+			self._player.jump_backward()
+			self._player.call_next_frame()
+
+		# forward
+		elif event.key() == QtCore.Qt.Key_C:
+			self._player.jump_forward()
+			self._player.call_next_frame()
+
+		# toggle play
+		elif event.key() == QtCore.Qt.Key_Space:
+			if self._player.is_playing:
+				self._player.stop()
+			else:
+				self._player.play()
+
 	def __time_changed(self):
 		"""
 		If the timeline pointer is changed the player position is also changed
@@ -51,8 +72,8 @@ class Module(object):
 
 		# Flag to avoid recursive position change, between the player and the timeline
 		self._update_time = False        
-		self._player.video_index = self._time.value-1
-		self._player.update_frame()
+		self._player.video_index = self._time.value
+		self._player.call_next_frame()
 		self._update_time = True
 
 	def __dummy(self): pass
@@ -74,9 +95,12 @@ class Module(object):
 		self._player.videoFPS_valueChanged()
 
 	def process_frame_event(self, frame):
+
 		if self._update_time and self._player.value:
+
+			# Update the pointer in the timeline
 			self._time.pointer_changed_event = self.__dummy
-			self._time.value = self._player.video_index-1
+			self._time.value = self._player._current_frame_index
 			self._time.pointer_changed_event = self.__time_changed
 				
 		return super(Module, self).process_frame_event(frame)
