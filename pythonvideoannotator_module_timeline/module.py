@@ -99,8 +99,11 @@ class Module(object):
 
 	def load(self, data, project_path=None):
 		graphs_path = os.path.join(project_path, 'graphs')
+
 		for graph_path in list_files_in_path(graphs_path):
-			self._time.import_graph_csv(graph_path, ignore_rows=1)
-		
+			try:
+				self._time.import_graph_csv(graph_path, ignore_rows=1)
+			except:
+				print("Could not load", graph_path)
 		super(Module,self).load(data, project_path)
 		
