@@ -22,31 +22,12 @@ class Module(object):
 
 	def init_form(self):
 		self._time.pointer_changed_event = self.__time_changed
-		self._time.key_release_event 	 = self.__time_key_release_evt
 		super(Module, self).init_form()
 
 	######################################################################################
 	#### EVENTS ##########################################################################
 	######################################################################################
 
-	def __time_key_release_evt(self, event):
-
-		# walk backwards
-		if event.key() == QtCore.Qt.Key_Z:
-			self._player.jump_backward()
-			self._player.call_next_frame()
-
-		# forward
-		elif event.key() == QtCore.Qt.Key_C:
-			self._player.jump_forward()
-			self._player.call_next_frame()
-
-		# toggle play
-		elif event.key() == QtCore.Qt.Key_Space:
-			if self._player.is_playing:
-				self._player.stop()
-			else:
-				self._player.play()
 
 	def __time_changed(self):
 		"""
